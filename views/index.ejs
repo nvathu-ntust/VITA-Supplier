@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VITA - Manage Suppliers With Confidence</title>
 
   <!-- HTMX -->
@@ -24,73 +25,274 @@
       --secondary: #f8fafc;
       --radius: 0.5rem;
     }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: system-ui, sans-serif; line-height: 1.6; color: var(--fg); background: var(--bg); }
-    a { text-decoration: none; color: inherit; }
-    img { max-width: 100%; display: block; }
-    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
 
-    /* Header */
-    header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.5rem; }
-    .logo img { height: 40px; width: 40px; }
-    nav { display: none; gap: 2rem; font-weight: 500; }
-    nav a:hover { color: var(--primary); }
-    .btn { padding: 0.75rem 1.5rem; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: all .2s; }
-    .btn-ghost:hover { background: var(--secondary); }
-    .btn-primary { background: var(--primary); color: white; border: none; }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 10px 20px rgba(37,99,235,0.25); }
-
-    /* Hero */
-    .hero { position: relative; min-height: 90vh; display: flex; align-items: center; overflow: hidden; color: white; }
-    .hero::before {
-      content: ""; position: absolute; inset: 0; z-index: -1;
-      background: linear-gradient(to right, rgba(255,255,255,.95), rgba(255,255,255,.7)),
-                  url('/assets/hero-image.jpg') center/cover no-repeat;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .hero h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
-    .hero h1 span { color: var(--primary); }
-    .hero p { font-size: 1.4rem; color: var(--muted-fg); margin-bottom: 2rem; max-width: 600px; }
-    .hero-buttons { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 4rem; }
-    .btn-xl { padding: 1rem 2rem; font-size: 1.1rem; }
-    .btn-outline { background: transparent; border: 2px solid white; }
-    .btn-outline:hover { background: white; color: var(--primary); }
-    .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 500px; }
-    .stat h3 { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
-    .stat p { font-size: 0.9rem; color: var(--muted-fg); }
 
-    /* Features */
-    .features { padding: 6rem 0; background: var(--secondary); text-align: center; }
-    .section-title { font-size: 2.8rem; font-weight: 800; margin-bottom: 1rem; }
-    .section-title span { color: var(--primary); }
-    .section-subtitle { font-size: 1.25rem; color: var(--muted-fg); max-width: 700px; margin: 0 auto 4rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; transition: all .3s; }
-    .card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.08); transform: translateY(-8px); }
-    .card-icon { width: 56px; height: 56px; background: rgba(37,99,235,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
-    .card h3 { font-size: 1.4rem; margin-bottom: 0.75rem; font-weight: 700; }
-    .card p { color: var(--muted-fg); }
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+    }
 
-    /* Footer */
-    footer { background: var(--secondary); border-top: 1px solid var(--border); padding: 4rem 0 2rem; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
-    .footer-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4rem; margin-bottom: 1rem; }
-    .footer-logo img { height: 32px; width: 32px; }
-    .footer-col h4 { font-weight: 600; margin-bottom: 1.5rem; }
-    .footer-col a { display: block; padding: 0.4rem 0; color: var(--muted-fg); }
-    .footer-col a:hover { color: var(--primary); }
-    .copyright { text-align: center; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--muted-fg); font-size: 0.9rem; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+
+    nav {
+      display: none;
+      gap: 2rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-ghost:hover {
+      background: var(--secondary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to right, rgba(255, 255, 255, .95), rgba(255, 255, 255, .7)),
+        url('/assets/hero-image.jpg') center/cover no-repeat;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero p {
+      font-size: 1.4rem;
+      color: var(--muted-fg);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 500px;
+    }
+
+    .stat h3 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat p {
+      font-size: 0.9rem;
+      color: var(--muted-fg);
+    }
+
+    .features {
+      padding: 6rem 0;
+      background: var(--secondary);
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .section-title span {
+      color: var(--primary);
+    }
+
+    .section-subtitle {
+      font-size: 1.25rem;
+      color: var(--muted-fg);
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: all .3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      transform: translateY(-8px);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(37, 99, 235, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+
+    .card p {
+      color: var(--muted-fg);
+    }
+
+    footer {
+      background: var(--secondary);
+      border-top: 1px solid var(--border);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo img {
+      height: 32px;
+      width: 32px;
+    }
+
+    .footer-col h4 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col a {
+      display: block;
+      padding: 0.4rem 0;
+      color: var(--muted-fg);
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted-fg);
+      font-size: 0.9rem;
+    }
 
     @media (min-width: 768px) {
-      nav { display: flex; }
-      .hero h1 { font-size: 4.5rem; }
+      nav {
+        display: flex;
+      }
+
+      .hero h1 {
+        font-size: 4.5rem;
+      }
     }
+
     @media (min-width: 1024px) {
-      .hero h1 { font-size: 5.5rem; }
+      .hero h1 {
+        font-size: 5.5rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Header -->
@@ -122,19 +324,20 @@
       <div style="max-width: 800px;">
         <h1>Manage Your Suppliers <span>With Confidence</span></h1>
         <p>The all-in-one platform for general contractors to streamline supplier relationships, track orders, and build better projects.</p>
-        
-        <!-- <div class="hero-buttons">
-          <button class="btn btn-primary btn-xl">
-            Get Started Free
-            <i data-lucide="arrow-right" style="margin-left:8px;vertical-align:middle;"></i>
-          </button>
-          <button class="btn btn-outline btn-xl">Watch Demo</button>
-        </div> -->
 
         <div class="stats">
-          <div class="stat"><h3>500+</h3><p>Active Contractors</p></div>
-          <div class="stat"><h3>2,000+</h3><p>Verified Suppliers</p></div>
-          <div class="stat"><h3>$50M+</h3><p>Orders Managed</p></div>
+          <div class="stat">
+            <h3>500+</h3>
+            <p>Active Contractors</p>
+          </div>
+          <div class="stat">
+            <h3>2,000+</h3>
+            <p>Verified Suppliers</p>
+          </div>
+          <div class="stat">
+            <h3>$50M+</h3>
+            <p>Orders Managed</p>
+          </div>
         </div>
       </div>
     </div>
@@ -147,21 +350,25 @@
       <p class="section-subtitle">Powerful features designed specifically for general contractors.</p>
 
       <div class="grid">
-        <% const features = [
-          {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles."},
-          {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters."},
-          {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place."},
-          {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs."},
-          {icon:"message-square", title:"Direct Communication", desc:"Built-in messaging to resolve issues quickly."},
-          {icon:"shield", title:"Compliance Management", desc:"Automated tracking of insurance, licensing, and safety."}
-        ]; %>
+        <% 
+          const features = [
+            {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
+            {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/features/search-filter"},
+            {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place.", link:"/features/order-tracking"},
+            {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/features/performance-analytics"},
+            {icon:"message-square", title:"Direct Communication", desc:"Built-in messaging to resolve issues quickly.", link:"/features/direct-communication"},
+            {icon:"shield", title:"Compliance Management", desc:"Automated tracking of insurance, licensing, and safety.", link:"/features/compliance-management"}
+          ]; 
+        %>
 
         <% features.forEach(f => { %>
-          <div class="card">
-            <div class="card-icon"><i data-lucide="<%= f.icon %>"></i></div>
-            <h3><%= f.title %></h3>
-            <p><%= f.desc %></p>
-          </div>
+          <a href="<%= f.link %>" class="card-link">
+            <div class="card">
+              <div class="card-icon"><i data-lucide="<%= f.icon %>"></i></div>
+              <h3><%= f.title %></h3>
+              <p><%= f.desc %></p>
+            </div>
+          </a>
         <% }); %>
       </div>
     </div>
@@ -197,6 +404,9 @@
     </div>
   </footer>
 
-  <script>lucide.createIcons();</script>
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
+
 </html>
