@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VITA - Supplier Database</title>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --muted-fg: #94a3b8;
+      --border: #e2e8f0;
+      --card: #ffffff;
+      --secondary: #f8fafc;
+      --radius: 0.5rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+
+    .logo img {
+      height: 40px;
+      /* or any value you prefer */
+      width: auto;
+      /* maintain aspect ratio */
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      margin-left: 0.5rem;
+    }
+
+    .btn-ghost:hover {
+      background: var(--secondary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .database-section {
+      padding: 4rem 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card-header {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .supplier-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .supplier-table th,
+    .supplier-table td {
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius);
+      background: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+    }
+
+    .badge.pending {
+      background: orange;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: var(--card);
+      padding: 2rem;
+      border-radius: var(--radius);
+      width: 400px;
+      max-width: 90%;
+    }
+
+    .modal-content input,
+    .modal-content select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    footer {
+      background: var(--secondary);
+      border-top: 1px solid var(--border);
+      padding: 4rem 1rem 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col h4 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col a {
+      display: block;
+      padding: 0.4rem 0;
+      color: var(--muted-fg);
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted-fg);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <div class="logo">
+          <img src="/assets/vita-logo.png" alt="VITA Logo">
+          <span>VITA</span>
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about">About Us</a>
+          <a href="/service">Service</a>
+          <a href="/career">Career</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <div>
+          <% if (userName) { %>
+            <span>Welcome <%= userName %></span>
+            <% } else { %>
+              <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+              <% } %>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Supplier Table -->
+  <section class="database-section">
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          Your Suppliers
+          <button class="btn btn-primary" hx-get="/suppliers/new" hx-target="#modal-body" hx-trigger="click">Add
+            Supplier</button>
+        </div>
+
+        <table class="supplier-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Rating</th>
+              <th>Projects</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="supplier-list">
+            <% mockSuppliers.forEach(function(supplier){ %>
+              <tr id="supplier-<%= supplier.id %>">
+                <td>
+                  <%= supplier.name %>
+                </td>
+                <td><span class="badge">
+                    <%= supplier.category %>
+                  </span></td>
+                <td>
+                  <%= supplier.location %>
+                </td>
+                <td>
+                  <%= supplier.rating %>
+                </td>
+                <td>
+                  <%= supplier.projects %>
+                </td>
+                <td>
+                  <span class="badge <%= supplier.status === 'Active' ? 'active' : 'pending' %>">
+                    <%= supplier.status %>
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-ghost" hx-get="/suppliers/<%= supplier.id %>/edit" hx-target="#modal-body"
+                    hx-trigger="click">Edit</button>
+
+                  <!-- New Button for adding performance metrics -->
+                  <button class="btn btn-primary" hx-get="/suppliers/<%= supplier.id %>/performance/new"
+                    hx-target="#modal-body" hx-trigger="click">Add Performance</button>
+
+                  <button class="btn btn-ghost" hx-delete="/suppliers/<%= supplier.id %>"
+                    hx-target="#supplier-<%= supplier.id %>" hx-swap="outerHTML">Delete</button>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div id="modal-body" class="modal-content"></div>
+  </div>
+
+  <script>
+    document.body.addEventListener('htmx:afterSwap', (evt) => {
+      if (evt.target.id === "modal-body") {
+        document.getElementById('modal').style.display = 'flex';
+      }
+    });
+
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') {
+        e.target.style.display = 'none';
+        document.getElementById('modal-body').innerHTML = '';
+      }
+    });
+
+    lucide.createIcons();
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <img src="/assets/vita-logo.png" alt="VITA" />
+            <span>VITA</span>
+          </div>
+          <p>Empowering general contractors to build better through streamlined supplier management.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a><a href="#">Pricing</a><a href="#">Case Studies</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Help Center</a><a href="#">Contact Us</a><a href="#">Privacy</a>
+        </div>
+      </div>
+      <div class="copyright">© 2025 VITA. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+
+</html>

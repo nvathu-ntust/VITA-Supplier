@@ -1,0 +1,14 @@
+<form hx-put="/suppliers/<%= supplier.id %>" hx-target="#supplier-<%= supplier.id %>" hx-swap="outerHTML">
+  <label>Name: <input name="name" value="<%= supplier.name %>" required></label>
+  <label>Category: <input name="category" value="<%= supplier.category %>" required></label>
+  <label>Location: <input name="location" value="<%= supplier.location %>"></label>
+  <label>Rating: <input name="rating" type="number" step="0.1" value="<%= supplier.rating %>"></label>
+  <label>Projects: <input name="projects" type="number" value="<%= supplier.projects %>"></label>
+  <label>Status: 
+    <select name="status">
+      <option value="Active" <%= supplier.status === 'Active' ? 'selected' : '' %>>Active</option>
+      <option value="Pending" <%= supplier.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+    </select>
+  </label>
+  <button type="submit">Update</button>
+</form>

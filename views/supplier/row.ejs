@@ -1,0 +1,12 @@
+<tr id="supplier-<%= supplier.id %>">
+  <td><%= supplier.name %></td>
+  <td><span class="badge"><%= supplier.category %></span></td>
+  <td><%= supplier.location %></td>
+  <td><%= supplier.rating %></td>
+  <td><%= supplier.projects %></td>
+  <td><span class="badge <%= supplier.status === 'Active' ? 'active' : 'pending' %>"><%= supplier.status %></span></td>
+  <td>
+    <button hx-get="/suppliers/<%= supplier.id %>/edit" hx-target="#modal-body">Edit</button>
+    <button hx-delete="/suppliers/<%= supplier.id %>" hx-target="#supplier-<%= supplier.id %>" hx-swap="outerHTML">Delete</button>
+  </td>
+</tr>
