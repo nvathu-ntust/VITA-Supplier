@@ -74,6 +74,15 @@
       font-size: 1.5rem;
     }
 
+  
+
+    .logo img {
+      height: 40px;
+      /* or any value you prefer */
+      width: auto;
+      /* maintain aspect ratio */
+    }
+
     nav {
       display: none;
       gap: 2rem;
@@ -305,18 +314,17 @@
         </div>
         <nav>
           <a href="/">Home</a>
-          <a href="/about">About Us</a>
+          <a href="/about-us">About Us</a>
           <a href="/service">Service</a>
           <a href="/career">Career</a>
           <a href="/contact">Contact</a>
         </nav>
         <div>
-          <button class="btn btn-ghost">
-            <a href="/register">
-              Sign Up
-            </a>
-          </button>
-          <!-- <button class="btn btn-primary">Get Started</button> -->
+          <% if (userName) { %>
+            <span>Welcome <%= userName %></span>
+            <% } else { %>
+              <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+              <% } %>
         </div>
       </div>
     </div>
@@ -327,7 +335,8 @@
     <div class="container">
       <div style="max-width: 800px;">
         <h1>Manage Your Suppliers <span>With Confidence</span></h1>
-        <p>The all-in-one platform for general contractors to streamline supplier relationships, track orders, and build better projects.</p>
+        <p>The all-in-one platform for general contractors to streamline supplier relationships, track orders, and build
+          better projects.</p>
 
         <div class="stats">
           <div class="stat">
@@ -353,28 +362,32 @@
       <h2 class="section-title">Everything You Need to <span>Manage Suppliers</span></h2>
       <p class="section-subtitle">Powerful features designed specifically for general contractors.</p>
 
-      <div class="grid">
-        <% 
-          const features = [
-            {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
-            {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/features/search-filter"},
-            {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place.", link:"/features/order-tracking"},
-            {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/features/performance-analytics"},
-            {icon:"message-square", title:"Direct Communication", desc:"Built-in messaging to resolve issues quickly.", link:"/features/direct-communication"},
-            {icon:"shield", title:"Compliance Management", desc:"Automated tracking of insurance, licensing, and safety.", link:"/features/compliance-management"}
-          ]; 
-        %>
+      <%
+var features = [
+  {icon:"users", title:"Supplier Directory", desc:`Centralized database of all your suppliers with detailed profiles.`, link:"/supplier"},
+  {icon:"search", title:"Smart Search & Filter", desc:`Find the right supplier instantly with powerful filters.`, link:"/features/search-filter"},
+  {icon:"file-text", title:"Order Tracking", desc:`Track all purchase orders, invoices, and deliveries in one place.`, link:"/features/order-tracking"},
+  {icon:"bar-chart-3", title:"Performance Analytics", desc:`Data-driven insights on supplier performance and costs.`, link:"/performance"},
+  {icon:"message-square", title:"Direct Communication", desc:`Built-in messaging to resolve issues quickly.`, link:"/features/direct-communication"},
+  {icon:"shield", title:"Compliance Management", desc:`Automated tracking of insurance, licensing, and safety.`, link:"/features/compliance-management"}
+];
+%>
 
-        <% features.forEach(f => { %>
-          <a href="<%= f.link %>" class="card-link">
-            <div class="card">
-              <div class="card-icon"><i data-lucide="<%= f.icon %>"></i></div>
-              <h3><%= f.title %></h3>
-              <p><%= f.desc %></p>
-            </div>
-          </a>
-        <% }); %>
-      </div>
+        <div class="grid">
+          <% features.forEach(f=> { %>
+            <a href="<%= f.link %>" class="card-link">
+              <div class="card">
+                <div class="card-icon"><i data-lucide="<%= f.icon %>"></i></div>
+                <h3>
+                  <%= f.title %>
+                </h3>
+                <p>
+                  <%= f.desc %>
+                </p>
+              </div>
+            </a>
+            <% }); %>
+        </div>
     </div>
   </section>
 
