@@ -29,3 +29,22 @@ CREATE TABLE supplier_performance (
   FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE CASCADE
 );
 
+-- Create inventory table
+CREATE TABLE IF NOT EXISTS inventory (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    supplier VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    stock INT NOT NULL
+);
+
+-- Insert mock data
+INSERT INTO inventory (name, supplier, category, stock) VALUES
+('Cement Bag', 'ABC Materials', 'Material', 50),
+('Steel Rod', 'Steel Co', 'Material', 15),
+('Excavator', 'HeavyMachinery Inc', 'Equipment', 2),
+('Paint', 'Colors Ltd', 'Material', 0),
+('Concrete Mixer', 'MixerPro', 'Equipment', 5),
+('Sand', 'ABC Materials', 'Material', 100),
+('Gravel', 'GravelCorp', 'Material', 40),
+('Wheel Loader', 'HeavyMachinery Inc', 'Equipment', 1);

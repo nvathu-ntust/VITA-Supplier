@@ -171,6 +171,39 @@ app.get('/performance', (req, res) => {
   );
 });
 
+// --- Inventory Page ---
+app.get('/inventory', (req, res) => {
+  const search = req.query.search || '';
+  const category = req.query.category || '';
+
+  let sql = 'SELECT * FROM inventory WHERE 1=1';
+  const params = [];
+
+  if (search) {
+    sql += ' AND name LIKE ?';
+    params.push(`%${search}%`);
+  }
+
+  if (category) {
+    sql += ' AND category = ?';
+    params.push(category);
+  }
+
+  db.query(sql, params, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Database error');
+    }
+
+    // HTMX partial
+    if (req.headers['hx-request']) {
+      return res.render('inventory/inventory-cards', { products: results });
+    }
+
+    res.render('inventory/inventory', { products: results, search, category, userName: req.session.userName });
+  });
+});
+
 // Register page
 app.get('/register', (req, res) => res.render('register'));
 app.post('/register', (req, res) => {

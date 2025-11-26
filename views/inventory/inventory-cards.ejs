@@ -1,0 +1,12 @@
+<% if (products.length === 0) { %>
+  <div style="grid-column:1/-1;text-align:center;color:var(--muted-fg);">No products found</div>
+<% } %>
+
+<% products.forEach(p => { %>
+  <div class="card">
+    <h3><%= p.name %></h3>
+    <p>Supplier: <%= p.supplier %></p>
+    <p>Category: <%= p.category %></p>
+    <p class="stock <%= p.stock === 0 ? 'out' : (p.stock < 20 ? 'low' : '') %>">Stock: <%= p.stock %></p>
+  </div>
+<% }) %>
