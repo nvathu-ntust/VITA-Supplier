@@ -201,12 +201,16 @@
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      transition: all .3s;
-    }
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: all .3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 
     .card:hover {
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
