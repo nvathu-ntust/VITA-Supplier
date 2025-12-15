@@ -225,6 +225,28 @@
             margin-bottom: 1rem;
             font-weight: 600;
         }
+
+        .trusted-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-left: 0.5rem;
+            padding: 0.15rem 0.5rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        .trusted-supplier {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+        }
     </style>
 
 </head>
@@ -242,7 +264,7 @@
                 <nav>
                     <a href="/">Home</a>
                     <a href="/about-us">About Us</a>
-                    <a href="/service">Service</a>
+                    <a href="/subscription">Subscription</a>
                     <a href="/career">Career</a>
                     <a href="/contact">Contact</a>
                 </nav>
@@ -284,9 +306,17 @@
                         <tbody>
                             <% records.forEach(r=> { %>
                                 <tr>
-                                    <td><strong>
+                                    <td>
+                                        <strong
+                                            class="<%= r.supplier_subscription === 'pro' ? 'trusted-supplier' : '' %>">
                                             <%= r.supplier_name %>
-                                        </strong></td>
+                                        </strong>
+
+                                        <% if (r.supplier_subscription==='pro' ) { %>
+                                            <span class="trusted-badge">Trusted Supplier</span>
+                                            <% } %>
+                                    </td>
+
                                     <td>
                                         <%= r.compliance_type %>
                                     </td>

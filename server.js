@@ -309,49 +309,62 @@ app.get('/inventory', (req, res) => {
 
 app.get('/compliance', (req, res) => {
   const userId = req.session.userId;
-
   if (!userId) return res.redirect('/login');
 
-  // Lấy role và name
-  db.query('SELECT role, name FROM users WHERE id = ?', [userId], (err, users) => {
-    if (err) return res.status(500).send(err);
+  // Get current user info
+  db.query(
+    'SELECT id, role, name, subscription FROM users WHERE id = ?',
+    [userId],
+    (err, users) => {
+      if (err) return res.status(500).send(err);
+      if (!users.length) return res.redirect('/login');
 
-    const role = users[0].role;
-    const userName = users[0].name;
+      const { role, name: userName, subscription } = users[0];
 
-    let sql = `
-  SELECT 
-    id, 
-    supplier_name, 
-    compliance_type, 
-    status, 
-    DATE_FORMAT(expiry_date, '%Y-%m-%d') AS expiry_date, 
-    document_name, 
-    document_path 
-  FROM compliance_records
-`;
-    const params = [];
+      let sql = `
+        SELECT 
+          cr.id,
+          cr.supplier_name,
+          cr.compliance_type,
+          cr.status,
+          DATE_FORMAT(cr.expiry_date, '%Y-%m-%d') AS expiry_date,
+          cr.document_name,
+          cr.document_path,
+          u.subscription AS supplier_subscription
+        FROM compliance_records cr
+        LEFT JOIN users u
+          ON LOWER(u.name) = LOWER(cr.supplier_name)
+      `;
 
-    // Nếu là supplier, chỉ lấy record của chính họ
-    if (role === 'supplier') {
-      sql += ' WHERE supplier_name = ?';
-      params.push(userName);
-    }
+      const params = [];
 
-    sql += ' ORDER BY expiry_date ASC';
+      // Supplier: only see own records
+      if (role === 'supplier') {
+        sql += ' WHERE LOWER(cr.supplier_name) = LOWER(?)';
+        params.push(userName);
+      }
 
-    db.query(sql, params, (err2, records) => {
-      if (err2) return res.status(500).send(err2);
+      sql += ' ORDER BY cr.expiry_date ASC';
 
-      res.render('compliance/compliance', {
-        records,
-        userName,
-        role,
-        uploaded: req.query.uploaded === '1'
+      db.query(sql, params, (err2, records) => {
+        if (err2) return res.status(500).send(err2);
+
+        // Is current supplier PRO?
+        const isProSupplier =
+          role === 'supplier' && subscription === 'pro';
+
+        res.render('compliance/compliance', {
+          records,
+          role,
+          userName,
+          isProSupplier,
+          uploaded: req.query.uploaded === '1'
+        });
       });
-    });
-  });
+    }
+  );
 });
+
 
 app.post('/compliance/update/:id', (req, res) => {
   const userId = req.session.userId;
@@ -469,8 +482,12 @@ app.post('/register', (req, res) => {
 
 
 app.get('/subscription', (req, res) => {
+  const userName = req.session.userName;
+  const role = req.session.role; // or fetch from DB
+
   res.render('subscription/subscription', {
-    userName: req.session.userName
+    userName,
+    role
   });
 });
 
@@ -510,6 +527,7 @@ app.post('/login', (req, res) => {
         // Store user info in session
         req.session.userId = user.id;
         req.session.userName = user.name;
+        req.session.role = user.role
         res.redirect('/'); // redirect to home
       } else {
         res.send('Invalid credentials');
