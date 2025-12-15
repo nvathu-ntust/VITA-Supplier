@@ -372,19 +372,24 @@
 
     <%
       var features = [
-        {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
-        {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/inventory"},
         {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place.", link:"/orders"},
-        {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/performance"}
-      ];
-
-      if (subscription === 'pro') {
-        features.push({
+        {
           icon:"shield",
           title:"Compliance Management",
           desc:"Automated tracking of insurance, licensing, and safety.",
           link:"/compliance"
-        });
+        }
+      ];
+
+      if (subscription === 'pro' && role === 'contractor') {
+        features.push({icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/performance"});
+      }
+
+      if (role === 'contractor') {
+        features.push(
+        {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
+        {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/inventory"}
+        )
       }
     %>
 

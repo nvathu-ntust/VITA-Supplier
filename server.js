@@ -62,21 +62,36 @@ db.connect(err => {
   else console.log('Connected to MySQL');
 });
 
+
 // Routes
 app.get('/', (req, res) => {
+  if (!req.session.userId) {
+    // nếu chưa login
+    return res.render('index', {
+      userName: null,
+      subscription: 'manual',
+      role: null
+    });
+  }
+
   db.query(
-    'SELECT subscription FROM users WHERE id = ?',
+    'SELECT subscription, role FROM users WHERE id = ?',
     [req.session.userId],
     (err, result) => {
+      if (err) return res.status(500).send(err);
+
       const subscription = result?.[0]?.subscription || 'manual';
+      const role = result?.[0]?.role || null;
 
       res.render('index', {
         userName: req.session.userName,
-        subscription
+        subscription,
+        role
       });
     }
   );
 });
+
 
 app.get('/about-us', (req, res) => {
   res.render('about', { userName: req.session.userName });
@@ -100,7 +115,7 @@ app.post('/contact/submit', (req, res) => {
 });
 // GET form
 app.get('/suppliers/new', (req, res) => {
-  res.render('supplier/new'); 
+  res.render('supplier/new');
 });
 
 
@@ -293,19 +308,82 @@ app.get('/inventory', (req, res) => {
 });
 
 app.get('/compliance', (req, res) => {
-  db.query(
-    'SELECT * FROM compliance_records ORDER BY expiry_date ASC',
-    (err, results) => {
-      if (err) return res.status(500).send(err);
+  const userId = req.session.userId;
+
+  if (!userId) return res.redirect('/login');
+
+  // Lấy role và name
+  db.query('SELECT role, name FROM users WHERE id = ?', [userId], (err, users) => {
+    if (err) return res.status(500).send(err);
+
+    const role = users[0].role;
+    const userName = users[0].name;
+
+    let sql = `
+  SELECT 
+    id, 
+    supplier_name, 
+    compliance_type, 
+    status, 
+    DATE_FORMAT(expiry_date, '%Y-%m-%d') AS expiry_date, 
+    document_name, 
+    document_path 
+  FROM compliance_records
+`;
+    const params = [];
+
+    // Nếu là supplier, chỉ lấy record của chính họ
+    if (role === 'supplier') {
+      sql += ' WHERE supplier_name = ?';
+      params.push(userName);
+    }
+
+    sql += ' ORDER BY expiry_date ASC';
+
+    db.query(sql, params, (err2, records) => {
+      if (err2) return res.status(500).send(err2);
 
       res.render('compliance/compliance', {
-        records: results,
-        userName: req.session.userName,
+        records,
+        userName,
+        role,
         uploaded: req.query.uploaded === '1'
       });
-    }
-  );
+    });
+  });
 });
+
+app.post('/compliance/update/:id', (req, res) => {
+  const userId = req.session.userId;
+  const { status, expiry_date } = req.body; // expiry_date từ form là "YYYY-MM-DD"
+  const { id } = req.params;
+
+  // Lấy role và name để kiểm tra quyền
+  db.query('SELECT role, name FROM users WHERE id = ?', [userId], (err, rows) => {
+    if (err) return res.status(500).send(err);
+    if (!rows.length) return res.status(404).send('User not found');
+
+    const { role, name } = rows[0];
+
+    // Chỉ supplier mới được edit record của chính họ
+    if (role !== 'supplier') return res.status(403).send('Forbidden');
+
+    // Cập nhật record, không dùng new Date(), lưu trực tiếp string YYYY-MM-DD
+    db.query(
+      'UPDATE compliance_records SET status = ?, expiry_date = ? WHERE id = ? AND LOWER(supplier_name) = LOWER(?)',
+      [status, expiry_date, id, name],
+      (err, result) => {
+        if (err) return res.status(500).send(err);
+        if (result.affectedRows === 0)
+          return res.status(404).send('Record not found or not yours');
+
+        // Redirect kèm query param để hiển thị thông báo
+        res.redirect('/compliance?updated=1');
+      }
+    );
+  });
+});
+
 
 app.get('/compliance/search', (req, res) => {
   const { keyword, type, status } = req.query;
@@ -339,16 +417,14 @@ app.get('/compliance/search', (req, res) => {
 app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
   const { id } = req.params;
 
-  if (!req.file) {
-    return res.redirect('/compliance?uploaded=0');
-  }
+  // Đường dẫn lưu file trong public
+  const path = `uploads/${req.file.filename}`;
 
   db.query(
-    'UPDATE compliance_records SET document_name = ? WHERE id = ?',
-    [req.file.filename, id],  
+    'UPDATE compliance_records SET document_name = ?, document_path = ? WHERE id = ?',
+    [req.file.originalname, path, id],
     err => {
       if (err) return res.status(500).send(err);
-
       res.redirect('/compliance?uploaded=1');
     }
   );
@@ -357,19 +433,40 @@ app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
 
 
 
+
 // Register page
 app.get('/register', (req, res) => res.render('register'));
+
 app.post('/register', (req, res) => {
-  const { name, email, password } = req.body;
-  db.query('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, password], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.send('Error registering user');
-    } else {
-      res.redirect('/login');
+  const { name, email, password, role } = req.body;
+
+  db.query(
+    'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+    [name, email, password, role],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.send('Error registering user');
+      }
+
+      // Nếu role là supplier, thêm vào compliance_records
+      if (role === 'supplier') {
+        db.query(
+          'INSERT INTO compliance_records (supplier_name, compliance_type, status, expiry_date) VALUES (?, ?, ?, ?)',
+          [name, 'Insurance', 'Valid', new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)], // expiry 1 năm sau
+          err2 => {
+            if (err2) console.log('Error adding to compliance_records:', err2);
+            // redirect về login
+            res.redirect('/login');
+          }
+        );
+      } else {
+        res.redirect('/login');
+      }
     }
-  });
+  );
 });
+
 
 app.get('/subscription', (req, res) => {
   res.render('subscription/subscription', {

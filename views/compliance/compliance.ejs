@@ -10,128 +10,152 @@
     <style>
         :root {
             --primary: #2563eb;
-            --bg: #fff;
+            --primary-dark: #1d4ed8;
+            --bg: #ffffff;
             --fg: #0f172a;
             --muted: #64748b;
+            --muted-fg: #94a3b8;
             --border: #e2e8f0;
+            --card: #ffffff;
             --secondary: #f8fafc;
             --radius: 0.5rem;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: system-ui, sans-serif;
+            line-height: 1.6;
             color: var(--fg);
             background: var(--bg);
         }
 
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
         .container {
             max-width: 1280px;
-            margin: auto;
+            margin: 0 auto;
             padding: 0 1rem;
         }
 
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-ghost:hover {
+            background: var(--secondary);
+        }
+
         h1 {
-            font-size: 2.25rem;
+            font-size: 2.5rem;
             font-weight: 900;
+            margin-bottom: 0.5rem;
         }
 
         h1 span {
             color: var(--primary);
         }
 
-        .section-subtitle {
+        p {
             color: var(--muted);
-            max-width: 640px;
-            margin-top: 0.5rem;
-        }
-
-        .filter-bar {
-            display: flex;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .filter-bar input,
-        .filter-bar select {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-
-        .card {
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            font-size: 0.75rem;
-            color: var(--muted);
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        td {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .pill {
-            padding: 0.25rem 0.6rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .valid {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .expiring {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .expired {
-            background: #fee2e2;
-            color: #991b1b;
+            margin-bottom: 2rem;
         }
 
         .table-wrapper {
             overflow-x: auto;
+            margin-top: 1rem;
         }
 
         .table {
             width: 100%;
             border-collapse: collapse;
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 0.875rem;
         }
 
         .table th {
-            text-align: left;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            background: var(--secondary);
+            color: var(--fg);
+            font-weight: 600;
             text-transform: uppercase;
-            color: var(--muted);
-            padding: 0.75rem 0.5rem;
-            border-bottom: 1px solid var(--border);
+            letter-spacing: 0.05em;
         }
 
         .table td {
-            padding: 0.9rem 0.5rem;
-            font-size: 0.9rem;
+            color: var(--fg);
         }
 
         .table tr:hover {
-            background: var(--secondary);
+            background: var(--hover-bg);
+        }
+
+        .status-pill {
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            text-align: center;
         }
 
         .status-pill.valid {
@@ -149,57 +173,176 @@
             color: #991b1b;
         }
 
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        select,
+        input[type="date"] {
+            padding: 0.4rem 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            min-width: 100px;
+        }
+
+        button.btn-ghost {
+            padding: 0.4rem 0.8rem;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--fg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button.btn-ghost:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
         .upload-form {
             display: flex;
             gap: 0.5rem;
-            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
         }
 
         .upload-form input[type="file"] {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .card-success {
+            background: #ecfeff;
+            border-color: #67e8f9;
+            color: #155e75;
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
     </style>
+
 </head>
 
 <body>
-    <% if (uploaded) { %>
-        <div class="card" style="background:#ecfeff;
-              border-color:#67e8f9;
-              color:#155e75;
-              margin-bottom:1.5rem;">
-            ✔ Document uploaded successfully
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <img src="/assets/vita-logo.png" alt="VITA Logo">
+                    <span>VITA</span>
+                </div>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/about-us">About Us</a>
+                    <a href="/service">Service</a>
+                    <a href="/career">Career</a>
+                    <a href="/contact">Contact</a>
+                </nav>
+                <div>
+                    <% if (userName) { %>
+                        <span>Welcome <%= userName %></span>
+                        <% } else { %>
+                            <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+                            <% } %>
+                </div>
+            </div>
         </div>
-        <% } %>
-            <section class="container" style="padding:3rem 0;">
+    </header>
+
+    <div class="container">
+        <% if (uploaded) { %>
+            <div class="card" style="background:#ecfeff; border-color:#67e8f9; color:#155e75;">
+                ✔ Document uploaded successfully
+            </div>
+            <% } %>
+
                 <h1>Compliance <span>Management</span></h1>
-                <p class="section-subtitle">
-                    Automated tracking of insurance, licensing, and safety compliance across suppliers.
-                </p>
+                <p>Automated tracking of insurance, licensing, and safety compliance across suppliers.</p>
 
-                <!-- Filters -->
-                <div class="filter-bar">
-                    <input type="text" name="keyword" placeholder="Search supplier" hx-get="/compliance/search"
-                        hx-trigger="keyup changed delay:300ms" hx-target="#compliance-table" />
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Type</th>
+                                <th>Document</th>
+                                <th>Status</th>
+                                <th>Expiry</th>
+                                <% if (role==='supplier' ) { %>
+                                    <th>Action</th>
+                                    <% } %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% records.forEach(r=> { %>
+                                <tr>
+                                    <td><strong>
+                                            <%= r.supplier_name %>
+                                        </strong></td>
+                                    <td>
+                                        <%= r.compliance_type %>
+                                    </td>
+                                    <td>
+                                        <% if (r.document_path) { %>
+                                            <a href="/<%= r.document_path %>" target="_blank">
+                                                <%= r.document_name %>
+                                            </a>
+                                            <% } else { %>
+                                                <span class="muted">No document</span>
+                                                <% } %>
+                                    </td>
 
-                    <select name="type" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
-                        <option value="">All Types</option>
-                        <option>Insurance</option>
-                        <option>License</option>
-                        <option>Safety</option>
-                    </select>
+                                    <% if (role==='supplier' ) { %>
+                                        <!-- Editable fields form -->
+                                        <form action="/compliance/update/<%= r.id %>" method="POST">
+                                            <td>
+                                                <select name="status">
+                                                    <option value="Valid" <%=r.status==='Valid' ?'selected':'' %>>Valid
+                                                    </option>
+                                                    <option value="Expiring" <%=r.status==='Expiring' ?'selected':'' %>
+                                                        >Expiring</option>
+                                                    <option value="Expired" <%=r.status==='Expired' ?'selected':'' %>
+                                                        >Expired</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="date" name="expiry_date" value="<%= r.expiry_date %>">
 
-                    <select name="status" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
-                        <option value="">All Status</option>
-                        <option>Valid</option>
-                        <option>Expiring</option>
-                        <option>Expired</option>
-                    </select>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-ghost" type="submit">Save</button>
+                                                <!-- Upload button (separate form) -->
+                                                <form action="/compliance/upload/<%= r.id %>" method="POST"
+                                                    enctype="multipart/form-data" class="upload-form"
+                                                    style="margin-top:0.5rem;">
+                                                    <input type="file" name="document">
+                                                    <button class="btn btn-ghost" type="submit">Upload</button>
+                                                </form>
+                                            </td>
+                                        </form>
+                                        <% } else { %>
+                                            <td>
+                                                <span class="status-pill <%= r.status.toLowerCase() %>">
+                                                    <%= r.status %>
+                                                </span>
+                                                <%= new Date(r.expiry_date).toLocaleDateString() %>
+                                            </td>
+                                            <% } %>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
                 </div>
+    </div>
 
-                <div id="compliance-table">
-                    <%- include('./compliance-table', { records }) %>
-                </div>
-            </section>
 
 </body>
 
