@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career - VITA</title>
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --muted-fg: #94a3b8;
+      --border: #e2e8f0;
+      --card: #ffffff;
+      --secondary: #f8fafc;
+      --radius: 0.5rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+
+  
+
+    .logo img {
+      height: 40px;
+      /* or any value you prefer */
+      width: auto;
+      /* maintain aspect ratio */
+    }
+
+    nav {
+      display: none;
+      gap: 2rem;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-ghost:hover {
+      background: var(--secondary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      color: white;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to right, rgba(255, 255, 255, .95), rgba(255, 255, 255, .7)),
+        url('/assets/hero-image.jpg') center/cover no-repeat;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero p {
+      font-size: 1.4rem;
+      color: var(--muted-fg);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 500px;
+    }
+
+    .stat h3 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat p {
+      font-size: 0.9rem;
+      color: var(--muted-fg);
+    }
+
+    .features {
+      padding: 6rem 0;
+      background: var(--secondary);
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .section-title span {
+      color: var(--primary);
+    }
+
+    .section-subtitle {
+      font-size: 1.25rem;
+      color: var(--muted-fg);
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: all .3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+    .card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      transform: translateY(-8px);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(37, 99, 235, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      font-weight: 700;
+    }
+
+    .card p {
+      color: var(--muted-fg);
+    }
+
+    footer {
+      background: var(--secondary);
+      border-top: 1px solid var(--border);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-logo img {
+      height: 32px;
+      width: 32px;
+    }
+
+    .footer-col h4 {
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-col a {
+      display: block;
+      padding: 0.4rem 0;
+      color: var(--muted-fg);
+    }
+
+    .footer-col a:hover {
+      color: var(--primary);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted-fg);
+      font-size: 0.9rem;
+    }
+
+    @media (min-width: 768px) {
+      nav {
+        display: flex;
+      }
+
+      .hero h1 {
+        font-size: 4.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero h1 {
+        font-size: 5.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (copy từ home) -->
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <div class="logo">
+          <img src="/assets/vita-logo.png" alt="VITA Logo">
+          <span>VITA</span>
+        </div>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/about-us">About Us</a>
+          <a href="/subscription">Subscription</a>
+          <a href="/career">Career</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <div>
+          <% if (userName) { %>
+            <span>Welcome <%= userName %></span>
+            <% } else { %>
+              <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+              <% } %>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div style="max-width: 800px;">
+        <h1>Join Our <span>Team</span></h1>
+        <p>Be part of VITA and help general contractors manage suppliers efficiently. Explore exciting opportunities and grow with us.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Job Listings -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">Current <span>Openings</span></h2>
+      <p class="section-subtitle">Browse available positions and apply today.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Frontend Developer</h3>
+          <p>Work on our web platform using React, Node.js, and modern web technologies.</p>
+          <a href="/career/apply/frontend" class="btn btn-primary">Apply Now</a>
+        </div>
+        <div class="card">
+          <h3>Backend Developer</h3>
+          <p>Develop scalable APIs, integrate databases, and build backend services.</p>
+          <a href="/career/apply/backend" class="btn btn-primary">Apply Now</a>
+        </div>
+        <div class="card">
+          <h3>Product Manager</h3>
+          <p>Lead feature planning, coordinate teams, and ensure timely delivery of solutions.</p>
+          <a href="/career/apply/pm" class="btn btn-primary">Apply Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <img src="/assets/vita-logo.png" alt="VITA">
+            <span>VITA</span>
+          </div>
+          <p style="color:var(--muted-fg);max-width:300px;">
+            Empowering general contractors to build better through streamlined supplier management.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a><a href="#">Pricing</a><a href="#">Case Studies</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Help Center</a><a href="#">Contact Us</a><a href="#">Privacy</a>
+        </div>
+      </div>
+      <div class="copyright">© 2025 VITA. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>

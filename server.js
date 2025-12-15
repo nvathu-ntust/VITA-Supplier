@@ -81,6 +81,11 @@ app.get('/', (req, res) => {
 app.get('/about-us', (req, res) => {
   res.render('about', { userName: req.session.userName });
 });
+
+app.get('/career', (req, res) => {
+  res.render('career/career', { userName: req.session.userName });
+});
+
 // GET form
 app.get('/suppliers/new', (req, res) => {
   res.render('supplier/new'); // sends the form HTML
