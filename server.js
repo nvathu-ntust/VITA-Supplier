@@ -248,6 +248,48 @@ app.get('/inventory', (req, res) => {
   });
 });
 
+app.get('/compliance', (req, res) => {
+  db.query(
+    'SELECT * FROM compliance_records ORDER BY expiry_date ASC',
+    (err, results) => {
+      if (err) return res.status(500).send(err);
+
+      res.render('compliance/compliance', {
+        records: results,
+        userName: req.session.userName
+      });
+    }
+  );
+});
+
+app.get('/compliance/search', (req, res) => {
+  const { keyword, type, status } = req.query;
+
+  let sql = 'SELECT * FROM compliance_records WHERE 1=1';
+  const params = [];
+
+  if (keyword) {
+    sql += ' AND supplier_name LIKE ?';
+    params.push(`%${keyword}%`);
+  }
+
+  if (type) {
+    sql += ' AND compliance_type = ?';
+    params.push(type);
+  }
+
+  if (status) {
+    sql += ' AND status = ?';
+    params.push(status);
+  }
+
+  sql += ' ORDER BY expiry_date ASC';
+
+  db.query(sql, params, (err, results) => {
+    if (err) return res.status(500).send(err);
+    res.render('compliance/compliance-table', { records: results });
+  });
+});
 
 
 

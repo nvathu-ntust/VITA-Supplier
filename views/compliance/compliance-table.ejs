@@ -1,0 +1,28 @@
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Supplier</th>
+        <th>Type</th>
+        <th>Document</th>
+        <th>Status</th>
+        <th>Expiry</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% records.forEach(r => { %>
+        <tr>
+          <td><strong><%= r.supplier_name %></strong></td>
+          <td><%= r.compliance_type %></td>
+          <td><%= r.document_name %></td>
+          <td>
+            <span class="pill <%= r.status.toLowerCase() %>">
+              <%= r.status %>
+            </span>
+          </td>
+          <td><%= r.expiry_date %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

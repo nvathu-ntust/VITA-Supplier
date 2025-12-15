@@ -49,6 +49,18 @@ CREATE TABLE orders (
   expected_delivery DATE
 );
 
+CREATE TABLE compliance_records (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  supplier_name VARCHAR(255) NOT NULL,
+  compliance_type ENUM('Insurance','License','Safety') NOT NULL,
+  document_name VARCHAR(255),
+  status ENUM('Valid','Expiring','Expired') NOT NULL,
+  expiry_date DATE NOT NULL,
+  last_checked DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
 -- Insert mock data
 INSERT INTO inventory (name, supplier, category, stock) VALUES
 ('Cement Bag', 'ABC Materials', 'Material', 50),
@@ -59,3 +71,13 @@ INSERT INTO inventory (name, supplier, category, stock) VALUES
 ('Sand', 'ABC Materials', 'Material', 100),
 ('Gravel', 'GravelCorp', 'Material', 40),
 ('Wheel Loader', 'HeavyMachinery Inc', 'Equipment', 1);
+
+INSERT INTO compliance_records
+(supplier_name, compliance_type, document_name, status, expiry_date)
+VALUES
+('ABC Electrical Co.', 'Insurance', 'General Liability', 'Valid', '2026-03-12'),
+('Prime Plumbing Services', 'License', 'State Contractor License', 'Expiring', '2025-10-01'),
+('ABC Electrical Co.', 'Safety', 'OSHA Safety Certificate', 'Expired', '2024-12-01'),
+('Delta Steel Works', 'Insurance', 'Worker Compensation', 'Valid', '2026-01-18'),
+('Prime Plumbing Services', 'Safety', 'Site Safety Training', 'Expiring', '2025-08-20');
+
