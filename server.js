@@ -64,7 +64,18 @@ db.connect(err => {
 
 // Routes
 app.get('/', (req, res) => {
-  res.render('index', { userName: req.session.userName });
+  db.query(
+    'SELECT subscription FROM users WHERE id = ?',
+    [req.session.userId],
+    (err, result) => {
+      const subscription = result?.[0]?.subscription || 'manual';
+
+      res.render('index', {
+        userName: req.session.userName,
+        subscription
+      });
+    }
+  );
 });
 
 app.get('/about-us', (req, res) => {
@@ -342,6 +353,34 @@ app.post('/register', (req, res) => {
     }
   });
 });
+
+app.get('/subscription', (req, res) => {
+  res.render('subscription/subscription', {
+    userName: req.session.userName
+  });
+});
+
+app.get('/subscription/pro', (req, res) => {
+  res.render('subscription/pro-payment', {
+    userName: req.session.userName
+  });
+});
+
+app.post('/subscription/pro/pay', (req, res) => {
+  const userId = req.session.userId;
+  if (!userId) return res.redirect('/login');
+
+  db.query(
+    'UPDATE users SET subscription = ? WHERE id = ?',
+    ['pro', userId],
+    err => {
+      if (err) return res.status(500).send(err);
+
+      res.render('subscription/success', { userName: req.session.userName });
+    }
+  );
+});
+
 
 // Login page
 app.get('/login', (req, res) => res.render('login'));

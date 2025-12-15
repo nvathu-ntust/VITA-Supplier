@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Success - VITA</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f0f9ff;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 2rem 3rem;
+      border-radius: 0.5rem;
+      border: 1px solid #67e8f9;
+      color: #0c4a6e;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    h1 { margin-bottom: 1rem; }
+    p { margin-bottom: 2rem; }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn:hover { background: #1d4ed8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>✔ Payment Successful!</h1>
+    <p>Thank you, <%= userName %>! Your subscription is now active.</p>
+    <p>You will be redirected to the homepage shortly...</p>
+    <a href="/" class="btn">Go to Home Now</a>
+  </div>
+
+  <script>
+    // Redirect tự động sau 3 giây
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
+  </script>
+</body>
+</html>

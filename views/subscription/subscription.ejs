@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VITA - Manage Suppliers With Confidence</title>
-
-  <!-- HTMX -->
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-
-  <!-- Lucide Icons -->
+  <title>VITA - Subscription</title>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
   <style>
-    :root {
+        :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --bg: #ffffff;
@@ -307,13 +300,11 @@
 </head>
 
 <body>
-
-  <!-- Header -->
   <header>
     <div class="container">
       <div class="header-inner">
         <div class="logo">
-          <img src="/assets/vita-logo.png" alt="VITA Logo">
+          <img src="/assets/vita-logo.png">
           <span>VITA</span>
         </div>
         <nav>
@@ -323,6 +314,7 @@
           <a href="/career">Career</a>
           <a href="/contact">Contact</a>
         </nav>
+
         <div>
           <% if (userName) { %>
             <span>Welcome <%= userName %></span>
@@ -334,110 +326,41 @@
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
+  <section class="features">
     <div class="container">
-      <div style="max-width: 800px;">
-        <h1>Manage Your Suppliers <span>With Confidence</span></h1>
-        <p>The all-in-one platform for general contractors to streamline supplier relationships, track orders, and build
-          better projects.</p>
+      <h2 class="section-title">Choose Your <span>Plan</span></h2>
+      <p class="section-subtitle">Flexible plans for every contractor.</p>
 
-        <div class="stats">
-          <div class="stat">
-            <h3>500+</h3>
-            <p>Active Contractors</p>
-          </div>
-          <div class="stat">
-            <h3>2,000+</h3>
-            <p>Verified Suppliers</p>
-          </div>
-          <div class="stat">
-            <h3>$50M+</h3>
-            <p>Orders Managed</p>
-          </div>
+      <div class="grid">
+        <!-- MANUAL -->
+        <div class="card">
+          <div class="card-icon"><i data-lucide="file-text"></i></div>
+          <h3>Manual</h3>
+          <p>Basic supplier management.</p>
+          <ul style="margin:1rem 0;color:var(--muted-fg)">
+            <li>Supplier directory</li>
+            <li>Order tracking</li>
+            <li>No compliance</li>
+          </ul>
+          <a href="/" class="btn btn-primary">Continue Free</a>
+        </div>
+
+        <!-- PRO -->
+        <div class="card">
+          <div class="card-icon"><i data-lucide="shield"></i></div>
+          <h3>Pro</h3>
+          <p>Full supplier & compliance control.</p>
+          <ul style="margin:1rem 0;color:var(--muted-fg)">
+            <li>Everything in Manual</li>
+            <li>Compliance management</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="/subscription/pro" class="btn btn-primary">Upgrade to Pro</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features -->
-<section class="features">
-  <div class="container">
-    <h2 class="section-title">
-      Everything You Need to <span>Manage Suppliers</span>
-    </h2>
-    <p class="section-subtitle">
-      Powerful features designed specifically for general contractors.
-    </p>
-
-    <%
-      var features = [
-        {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
-        {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/inventory"},
-        {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place.", link:"/orders"},
-        {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/performance"}
-      ];
-
-      if (subscription === 'pro') {
-        features.push({
-          icon:"shield",
-          title:"Compliance Management",
-          desc:"Automated tracking of insurance, licensing, and safety.",
-          link:"/compliance"
-        });
-      }
-    %>
-
-    <div class="grid">
-      <% features.forEach(f => { %>
-        <a href="<%= f.link %>" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i data-lucide="<%= f.icon %>"></i>
-            </div>
-            <h3><%= f.title %></h3>
-            <p><%= f.desc %></p>
-          </div>
-        </a>
-      <% }) %>
-    </div>
-  </div>
-</section>
-
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-logo">
-            <img src="/assets/vita-logo.png" alt="VITA">
-            <span>VITA</span>
-          </div>
-          <p style="color:var(--muted-fg);max-width:300px;">
-            Empowering general contractors to build better through streamlined supplier management.
-          </p>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#">Features</a><a href="#">Pricing</a><a href="#">Case Studies</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a>
-        </div>
-        <div class="footer-col">
-          <h4>Support</h4>
-          <a href="#">Help Center</a><a href="#">Contact Us</a><a href="#">Privacy</a>
-        </div>
-      </div>
-      <div class="copyright">© 2025 VITA. All rights reserved.</div>
-    </div>
-  </footer>
-
-  <script>
-    lucide.createIcons();
-  </script>
+  <script>lucide.createIcons()</script>
 </body>
-
 </html>

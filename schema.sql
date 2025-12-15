@@ -62,6 +62,8 @@ CREATE TABLE compliance_records (
 ALTER TABLE compliance_records
 ADD COLUMN document_path VARCHAR(255);
 
+ALTER TABLE users
+ADD COLUMN subscription ENUM('manual','pro') DEFAULT 'manual';
 
 
 -- Insert mock data

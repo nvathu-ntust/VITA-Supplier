@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VITA - Manage Suppliers With Confidence</title>
-
-  <!-- HTMX -->
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-
-  <!-- Lucide Icons -->
+  <meta charset="UTF-8">
+  <title>VITA - Pro Payment</title>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
 
-  <style>
-    :root {
+            :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --bg: #ffffff;
@@ -303,141 +296,43 @@
         font-size: 5.5rem;
       }
     }
-  </style>
+    </style>
 </head>
 
 <body>
-
-  <!-- Header -->
   <header>
     <div class="container">
       <div class="header-inner">
         <div class="logo">
-          <img src="/assets/vita-logo.png" alt="VITA Logo">
+          <img src="/assets/vita-logo.png">
           <span>VITA</span>
-        </div>
-        <nav>
-          <a href="/">Home</a>
-          <a href="/about-us">About Us</a>
-          <a href="/subscription">Subscription</a>
-          <a href="/career">Career</a>
-          <a href="/contact">Contact</a>
-        </nav>
-        <div>
-          <% if (userName) { %>
-            <span>Welcome <%= userName %></span>
-            <% } else { %>
-              <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
-              <% } %>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <div style="max-width: 800px;">
-        <h1>Manage Your Suppliers <span>With Confidence</span></h1>
-        <p>The all-in-one platform for general contractors to streamline supplier relationships, track orders, and build
-          better projects.</p>
+  <section class="features">
+    <div class="container" style="max-width:500px">
+      <h2 class="section-title">Pro <span>Payment</span></h2>
+      <p class="section-subtitle">This is a demo payment. Any input works.</p>
 
-        <div class="stats">
-          <div class="stat">
-            <h3>500+</h3>
-            <p>Active Contractors</p>
-          </div>
-          <div class="stat">
-            <h3>2,000+</h3>
-            <p>Verified Suppliers</p>
-          </div>
-          <div class="stat">
-            <h3>$50M+</h3>
-            <p>Orders Managed</p>
-          </div>
-        </div>
-      </div>
+      <form action="/subscription/pro/pay" method="POST" class="card">
+        <label>Card Number</label>
+        <input class="input" required>
+
+        <label>Name on Card</label>
+        <input class="input" required>
+
+        <label>Expiry</label>
+        <input class="input" required>
+
+        <button class="btn btn-primary" style="margin-top:1rem;width:100%">
+          Pay $29/month
+        </button>
+      </form>
     </div>
   </section>
 
-  <!-- Features -->
-<section class="features">
-  <div class="container">
-    <h2 class="section-title">
-      Everything You Need to <span>Manage Suppliers</span>
-    </h2>
-    <p class="section-subtitle">
-      Powerful features designed specifically for general contractors.
-    </p>
-
-    <%
-      var features = [
-        {icon:"users", title:"Supplier Directory", desc:"Centralized database of all your suppliers with detailed profiles.", link:"/supplier"},
-        {icon:"search", title:"Smart Search & Filter", desc:"Find the right supplier instantly with powerful filters.", link:"/inventory"},
-        {icon:"file-text", title:"Order Tracking", desc:"Track all purchase orders, invoices, and deliveries in one place.", link:"/orders"},
-        {icon:"bar-chart-3", title:"Performance Analytics", desc:"Data-driven insights on supplier performance and costs.", link:"/performance"}
-      ];
-
-      if (subscription === 'pro') {
-        features.push({
-          icon:"shield",
-          title:"Compliance Management",
-          desc:"Automated tracking of insurance, licensing, and safety.",
-          link:"/compliance"
-        });
-      }
-    %>
-
-    <div class="grid">
-      <% features.forEach(f => { %>
-        <a href="<%= f.link %>" class="card-link">
-          <div class="card">
-            <div class="card-icon">
-              <i data-lucide="<%= f.icon %>"></i>
-            </div>
-            <h3><%= f.title %></h3>
-            <p><%= f.desc %></p>
-          </div>
-        </a>
-      <% }) %>
-    </div>
-  </div>
-</section>
-
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-logo">
-            <img src="/assets/vita-logo.png" alt="VITA">
-            <span>VITA</span>
-          </div>
-          <p style="color:var(--muted-fg);max-width:300px;">
-            Empowering general contractors to build better through streamlined supplier management.
-          </p>
-        </div>
-        <div class="footer-col">
-          <h4>Product</h4>
-          <a href="#">Features</a><a href="#">Pricing</a><a href="#">Case Studies</a>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a>
-        </div>
-        <div class="footer-col">
-          <h4>Support</h4>
-          <a href="#">Help Center</a><a href="#">Contact Us</a><a href="#">Privacy</a>
-        </div>
-      </div>
-      <div class="copyright">© 2025 VITA. All rights reserved.</div>
-    </div>
-  </footer>
-
-  <script>
-    lucide.createIcons();
-  </script>
+  <script>lucide.createIcons()</script>
 </body>
-
 </html>
