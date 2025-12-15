@@ -59,6 +59,9 @@ CREATE TABLE compliance_records (
   last_checked DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE compliance_records
+ADD COLUMN document_path VARCHAR(255);
+
 
 
 -- Insert mock data

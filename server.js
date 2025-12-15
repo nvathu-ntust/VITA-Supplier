@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const multer = require("multer")
 const path = require('path');
 const app = express();
 const PORT = 3000;
@@ -10,9 +11,24 @@ const PORT = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 const session = require('express-session');
+
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/compliance");
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ storage });
 
 app.use(session({
   secret: 'abcde123456@', // change this to any secret string
@@ -256,7 +272,8 @@ app.get('/compliance', (req, res) => {
 
       res.render('compliance/compliance', {
         records: results,
-        userName: req.session.userName
+        userName: req.session.userName,
+        uploaded: req.query.uploaded === '1'
       });
     }
   );
@@ -290,6 +307,25 @@ app.get('/compliance/search', (req, res) => {
     res.render('compliance/compliance-table', { records: results });
   });
 });
+
+app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
+  const { id } = req.params;
+
+  if (!req.file) {
+    return res.redirect('/compliance?uploaded=0');
+  }
+
+  db.query(
+    'UPDATE compliance_records SET document_name = ? WHERE id = ?',
+    [req.file.filename, id],  
+    err => {
+      if (err) return res.status(500).send(err);
+
+      res.redirect('/compliance?uploaded=1');
+    }
+  );
+});
+
 
 
 

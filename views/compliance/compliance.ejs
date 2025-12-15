@@ -1,126 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>VITA - Compliance Management</title>
+    <meta charset="UTF-8" />
+    <title>VITA - Compliance Management</title>
 
-  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 
-  <style>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #fff;
+            --fg: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --secondary: #f8fafc;
+            --radius: 0.5rem;
+        }
 
-    :root {
-      --primary:#2563eb;
-      --bg:#fff;
-      --fg:#0f172a;
-      --muted:#64748b;
-      --border:#e2e8f0;
-      --secondary:#f8fafc;
-      --radius:0.5rem;
-    }
+        body {
+            font-family: system-ui, sans-serif;
+            color: var(--fg);
+            background: var(--bg);
+        }
 
-    body {
-      font-family: system-ui, sans-serif;
-      color: var(--fg);
-      background: var(--bg);
-    }
+        .container {
+            max-width: 1280px;
+            margin: auto;
+            padding: 0 1rem;
+        }
 
-    .container { max-width:1280px; margin:auto; padding:0 1rem; }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 900;
+        }
 
-    h1 { font-size:2.25rem; font-weight:900; }
-    h1 span { color: var(--primary); }
+        h1 span {
+            color: var(--primary);
+        }
 
-    .section-subtitle {
-      color: var(--muted);
-      max-width: 640px;
-      margin-top: 0.5rem;
-    }
+        .section-subtitle {
+            color: var(--muted);
+            max-width: 640px;
+            margin-top: 0.5rem;
+        }
 
-    .filter-bar {
-      display:flex;
-      gap:1rem;
-      margin:2rem 0;
-      flex-wrap:wrap;
-    }
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
 
-    .filter-bar input,
-    .filter-bar select {
-      padding:0.5rem 1rem;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-    }
+        .filter-bar input,
+        .filter-bar select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
 
-    .card {
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:1.5rem;
-    }
+        .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
 
-    table {
-      width:100%;
-      border-collapse:collapse;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    th {
-      text-align:left;
-      font-size:0.75rem;
-      color:var(--muted);
-      padding-bottom:0.5rem;
-      border-bottom:1px solid var(--border);
-    }
+        th {
+            text-align: left;
+            font-size: 0.75rem;
+            color: var(--muted);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
 
-    td {
-      padding:0.75rem 0;
-      border-bottom:1px solid var(--border);
-    }
+        td {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
 
-    .pill {
-      padding:0.25rem 0.6rem;
-      border-radius:999px;
-      font-size:0.75rem;
-      font-weight:600;
-      display:inline-block;
-    }
+        .pill {
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
 
-    .valid { background:#dcfce7; color:#166534; }
-    .expiring { background:#fef3c7; color:#92400e; }
-    .expired { background:#fee2e2; color:#991b1b; }
-  </style>
+        .valid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .expiring {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table td {
+            padding: 0.9rem 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .table tr:hover {
+            background: var(--secondary);
+        }
+
+        .status-pill.valid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pill.expiring {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-pill.expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .upload-form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .upload-form input[type="file"] {
+            font-size: 0.75rem;
+        }
+    </style>
 </head>
 
 <body>
+    <% if (uploaded) { %>
+        <div class="card" style="background:#ecfeff;
+              border-color:#67e8f9;
+              color:#155e75;
+              margin-bottom:1.5rem;">
+            ✔ Document uploaded successfully
+        </div>
+        <% } %>
+            <section class="container" style="padding:3rem 0;">
+                <h1>Compliance <span>Management</span></h1>
+                <p class="section-subtitle">
+                    Automated tracking of insurance, licensing, and safety compliance across suppliers.
+                </p>
 
-<section class="container" style="padding:3rem 0;">
-  <h1>Compliance <span>Management</span></h1>
-  <p class="section-subtitle">
-    Automated tracking of insurance, licensing, and safety compliance across suppliers.
-  </p>
+                <!-- Filters -->
+                <div class="filter-bar">
+                    <input type="text" name="keyword" placeholder="Search supplier" hx-get="/compliance/search"
+                        hx-trigger="keyup changed delay:300ms" hx-target="#compliance-table" />
 
-  <!-- Filters -->
-  <div class="filter-bar">
-    <input type="text" name="keyword" placeholder="Search supplier"
-      hx-get="/compliance/search"
-      hx-trigger="keyup changed delay:300ms"
-      hx-target="#compliance-table" />
+                    <select name="type" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
+                        <option value="">All Types</option>
+                        <option>Insurance</option>
+                        <option>License</option>
+                        <option>Safety</option>
+                    </select>
 
-    <select name="type" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
-      <option value="">All Types</option>
-      <option>Insurance</option>
-      <option>License</option>
-      <option>Safety</option>
-    </select>
+                    <select name="status" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
+                        <option value="">All Status</option>
+                        <option>Valid</option>
+                        <option>Expiring</option>
+                        <option>Expired</option>
+                    </select>
+                </div>
 
-    <select name="status" hx-get="/compliance/search" hx-trigger="change" hx-target="#compliance-table">
-      <option value="">All Status</option>
-      <option>Valid</option>
-      <option>Expiring</option>
-      <option>Expired</option>
-    </select>
-  </div>
-
-  <div id="compliance-table">
-    <%- include('./compliance-table', { records }) %>
-  </div>
-</section>
+                <div id="compliance-table">
+                    <%- include('./compliance-table', { records }) %>
+                </div>
+            </section>
 
 </body>
+
 </html>

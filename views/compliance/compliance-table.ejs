@@ -1,5 +1,5 @@
-<div class="card">
-  <table>
+<div class="card table-wrapper">
+  <table class="table">
     <thead>
       <tr>
         <th>Supplier</th>
@@ -7,20 +7,69 @@
         <th>Document</th>
         <th>Status</th>
         <th>Expiry</th>
+        <th>Action</th>
       </tr>
     </thead>
+
     <tbody>
       <% records.forEach(r => { %>
         <tr>
-          <td><strong><%= r.supplier_name %></strong></td>
-          <td><%= r.compliance_type %></td>
-          <td><%= r.document_name %></td>
+          <!-- Supplier -->
           <td>
-            <span class="pill <%= r.status.toLowerCase() %>">
+            <strong><%= r.supplier_name %></strong>
+          </td>
+
+          <!-- Type -->
+          <td>
+            <%= r.compliance_type %>
+          </td>
+
+          <!-- Document -->
+          <td>
+            <% if (r.document_name) { %>
+              <a
+                href="/uploads/compliance/<%= r.document_name %>"
+                target="_blank"
+                class="order-link"
+              >
+                View document
+              </a>
+            <% } else { %>
+              <span class="muted">No document</span>
+            <% } %>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <span class="status-pill <%= r.status.toLowerCase() %>">
               <%= r.status %>
             </span>
           </td>
-          <td><%= r.expiry_date %></td>
+
+          <!-- Expiry -->
+          <td>
+            <%= new Date(r.expiry_date).toLocaleDateString() %>
+          </td>
+
+          <!-- Upload -->
+          <td>
+            <form
+              action="/compliance/upload/<%= r.id %>"
+              method="POST"
+              enctype="multipart/form-data"
+              style="display:flex;gap:.5rem;align-items:center;"
+            >
+              <input
+                type="file"
+                name="document"
+                required
+                style="font-size:.8rem;"
+              />
+              <button class="btn btn-ghost" type="submit">
+                Upload
+              </button>
+            </form>
+          </td>
         </tr>
       <% }) %>
     </tbody>
