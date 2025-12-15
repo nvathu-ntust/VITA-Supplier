@@ -86,9 +86,21 @@ app.get('/career', (req, res) => {
   res.render('career/career', { userName: req.session.userName });
 });
 
+app.get('/contact', (req, res) => {
+  res.render('contact/contact', { userName: req.session.userName });
+});
+
+app.post('/contact/submit', (req, res) => {
+  const { name, email, message } = req.body;
+
+  console.log("Contact form submitted:", { name, email, message });
+
+  // Render success page
+  res.render('contact/contact-success', { userName: req.session.userName });
+});
 // GET form
 app.get('/suppliers/new', (req, res) => {
-  res.render('supplier/new'); // sends the form HTML
+  res.render('supplier/new'); 
 });
 
 
