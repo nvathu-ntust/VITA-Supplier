@@ -65,6 +65,56 @@ ADD COLUMN document_path VARCHAR(255);
 ALTER TABLE users
 ADD COLUMN subscription ENUM('manual','pro') DEFAULT 'manual';
 
+CREATE TABLE projects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  budget DECIMAL(12,2),
+  deadline DATE,
+  status ENUM('open', 'approved', 'closed') DEFAULT 'open',
+  approved_by INT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+INSERT INTO projects (name, description, budget, deadline, status)
+VALUES
+(
+  'Office Building Electrical Upgrade',
+  'Upgrade electrical systems to meet new safety and compliance standards.',
+  120000.00,
+  '2025-03-30',
+  'open'
+),
+(
+  'Warehouse Fire Safety Compliance',
+  'Install fire suppression systems and update fire safety documentation.',
+  85000.00,
+  '2025-02-15',
+  'open'
+),
+(
+  'Commercial HVAC Installation',
+  'Complete HVAC installation for new commercial property.',
+  210000.00,
+  '2025-05-10',
+  'open'
+),
+(
+  'Retail Store Renovation',
+  'Full renovation including electrical, plumbing, and safety compliance.',
+  95000.00,
+  '2025-01-25',
+  'approved'
+),
+(
+  'Logistics Center Security Upgrade',
+  'Install access control and CCTV systems.',
+  60000.00,
+  '2025-04-01',
+  'closed'
+);
+
+
 
 -- Insert mock data
 INSERT INTO inventory (name, supplier, category, stock) VALUES

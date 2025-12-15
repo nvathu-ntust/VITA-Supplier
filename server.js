@@ -444,6 +444,48 @@ app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
 });
 
 
+app.get('/projects', (req, res) => {
+  const userId = req.session.userId;
+  
+  if (!userId) return res.redirect('/login');
+
+  db.query(
+    'SELECT role, name FROM users WHERE id = ?',
+    [userId],
+    (err, users) => {
+      if (err) return res.status(500).send(err);
+      if (!users.length) return res.redirect('/login');
+
+      const { role, name } = users[0];
+      if (role !== 'supplier') return res.status(403).send('Forbidden');
+
+      db.query(
+        `SELECT * FROM projects WHERE status = 'open' ORDER BY deadline ASC`,
+        (err2, projects) => {
+          if (err2) return res.status(500).send(err2);
+
+          res.render('projects/projects', {
+            projects,
+            userName: name,
+            role: role,
+            appliedProjectIds:  []
+          });
+        }
+      );
+    }
+  );
+});
+
+app.post('/projects/apply/:id', (req, res) => {
+  const supplierId = req.session.userId;
+  const projectId = req.params.id;
+
+  db.query(
+    'INSERT IGNORE INTO project_applications (project_id, supplier_id) VALUES (?, ?)',
+    [projectId, supplierId],
+    () => res.redirect('/projects')
+  );
+});
 
 
 
