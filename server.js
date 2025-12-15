@@ -60,7 +60,7 @@ app.get('/suppliers/new', (req, res) => {
 });
 
 
-// Example: GET /supplier
+// GET /supplier
 app.get('/supplier', (req, res) => {
   db.query('SELECT * FROM suppliers', (err, results) => {
     if (err) return res.send(err);
@@ -159,7 +159,7 @@ app.get('/performance', (req, res) => {
     (err, results) => {
       if (err) return res.status(500).send(err);
 
-      // Calculate trend (demo logic)
+
       results.forEach(s => {
         if (s.onTime > 95) s.trend = 'up';
         else if (s.onTime < 90) s.trend = 'down';
@@ -170,6 +170,50 @@ app.get('/performance', (req, res) => {
     }
   );
 });
+
+// Orders tracking page
+app.get('/orders', (req, res) => {
+  db.query(
+    'SELECT * FROM orders ORDER BY order_date DESC',
+    (err, results) => {
+      if (err) return res.status(500).send(err);
+
+      res.render('orders/orders', {
+        orders: results,
+        userName: req.session.userName
+      });
+    }
+  );
+});
+
+
+// Orders search & filter (HTMX)
+app.get('/orders/search', (req, res) => {
+  const { keyword, status } = req.query;
+
+  let sql = 'SELECT * FROM orders WHERE 1=1';
+  const params = [];
+
+  if (keyword) {
+    sql += ' AND (order_number LIKE ? OR supplier_name LIKE ?)';
+    params.push(`%${keyword}%`, `%${keyword}%`);
+  }
+
+  if (status && status !== 'All') {
+    sql += ' AND status = ?';
+    params.push(status);
+  }
+
+  sql += ' ORDER BY order_date DESC';
+
+  db.query(sql, params, (err, results) => {
+    if (err) return res.status(500).send(err);
+
+    // HTMX partial render
+    res.render('orders/order-table', { orders: results });
+  });
+});
+
 
 // --- Inventory Page ---
 app.get('/inventory', (req, res) => {
@@ -203,6 +247,9 @@ app.get('/inventory', (req, res) => {
     res.render('inventory/inventory', { products: results, search, category, userName: req.session.userName });
   });
 });
+
+
+
 
 // Register page
 app.get('/register', (req, res) => res.render('register'));

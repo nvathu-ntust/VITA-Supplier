@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Supplier</th>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Status</th>
+          <th>Expected</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(o => { %>
+          <tr>
+            <td>
+              <a href="/orders/<%= o.id %>" class="order-link">
+                #<%= o.order_number %>
+              </a>
+            </td>
+            <td><%= o.supplier_name %></td>
+            <td><%= o.product_name %></td>
+            <td><strong><%= o.quantity %></strong></td>
+            <td>
+              <span class="status-pill <%= o.status.toLowerCase() %>">
+                <%= o.status %>
+              </span>
+            </td>
+            <td>
+              <%= new Date(o.expected_delivery).toLocaleDateString() %>
+            </td>
+          </tr>
+        <% }) %>
+
+        <% if (!orders.length) { %>
+          <tr>
+            <td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">
+              No orders found
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

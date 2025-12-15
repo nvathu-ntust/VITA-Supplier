@@ -38,6 +38,17 @@ CREATE TABLE IF NOT EXISTS inventory (
     stock INT NOT NULL
 );
 
+CREATE TABLE orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_number VARCHAR(50),
+  supplier_name VARCHAR(100),
+  product_name VARCHAR(100),
+  quantity INT,
+  status ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled'),
+  order_date DATE,
+  expected_delivery DATE
+);
+
 -- Insert mock data
 INSERT INTO inventory (name, supplier, category, stock) VALUES
 ('Cement Bag', 'ABC Materials', 'Material', 50),

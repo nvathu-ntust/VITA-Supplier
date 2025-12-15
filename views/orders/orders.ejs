@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VITA - Stock Inventory</title>
+
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #ffffff;
+            --fg: #0f172a;
+            --muted: #64748b;
+            --muted-fg: #94a3b8;
+            --border: #e2e8f0;
+            --card: #ffffff;
+            --secondary: #f8fafc;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--fg);
+            background: var(--bg);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        nav {
+            display: none;
+            gap: 2rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-ghost:hover {
+            background: var(--secondary);
+        }
+
+        @media(min-width:768px) {
+            nav {
+                display: flex;
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all .3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--muted-fg);
+            margin-bottom: 0.25rem;
+        }
+
+        .stock {
+            font-weight: 700;
+        }
+
+        .stock.low {
+            color: orange;
+        }
+
+        .stock.out {
+            color: red;
+        }
+
+        /* ===== Order Tracking Enhancements ===== */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table td {
+            padding: 0.9rem 0.5rem;
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .table tr:hover {
+            background: var(--secondary);
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pill.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-pill.shipped {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-pill.delivered {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pill.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .order-link {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .order-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Section Heading (Inventory-style) ===== */
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            max-width: 640px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <img src="/assets/vita-logo.png" alt="VITA Logo">
+                    <span>VITA</span>
+                </div>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="/about-us">About Us</a>
+                    <a href="/service">Service</a>
+                    <a href="/career">Career</a>
+                    <a href="/contact">Contact</a>
+                </nav>
+                <div>
+                    <% if (userName) { %>
+                        <span>Welcome <%= userName %></span>
+                        <% } else { %>
+                            <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+                            <% } %>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Order tracking -->
+    <section class="container" style="padding:3rem 0;">
+
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">
+                        Order <span>Tracking</span>
+                    </h1>
+                    <p class="section-subtitle">
+                        Monitor supplier orders, delivery status, and delivery timelines in one place.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div class="filter-bar">
+                    <input type="text" name="keyword" placeholder="Search by order # or supplier"
+                        hx-get="/orders/search" hx-trigger="keyup changed delay:300ms" hx-target="#order-table" />
+
+                    <select name="status" hx-get="/orders/search" hx-trigger="change" hx-target="#order-table">
+                        <option value="">All Status</option>
+                        <option>Pending</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+
+
+                <div id="order-table">
+                    <%- include('./order-table', { orders }) %>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
