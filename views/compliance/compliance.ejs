@@ -14,7 +14,6 @@
             --bg: #ffffff;
             --fg: #0f172a;
             --muted: #64748b;
-            --muted-fg: #94a3b8;
             --border: #e2e8f0;
             --card: #ffffff;
             --secondary: #f8fafc;
@@ -29,35 +28,33 @@
 
         body {
             font-family: system-ui, sans-serif;
-            line-height: 1.6;
-            color: var(--fg);
             background: var(--bg);
+            color: var(--fg);
         }
 
         a {
-            text-decoration: none;
             color: inherit;
+            text-decoration: none;
         }
 
         .container {
             max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1rem;
+            margin: auto;
+            padding: 1rem;
         }
 
         header {
             position: sticky;
             top: 0;
-            z-index: 50;
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
+            z-index: 50;
         }
 
         .header-inner {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             height: 64px;
         }
 
@@ -65,41 +62,27 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-weight: 800;
             font-size: 1.5rem;
+            font-weight: 800;
         }
 
         .logo img {
             height: 40px;
-            width: auto;
         }
 
         nav {
             display: flex;
             gap: 2rem;
-            font-weight: 500;
         }
 
         nav a:hover {
             color: var(--primary);
         }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all .2s;
-        }
-
-        .btn-ghost:hover {
-            background: var(--secondary);
-        }
-
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             font-weight: 900;
-            margin-bottom: 0.5rem;
+            margin: 1rem 0 0.5rem;
         }
 
         h1 span {
@@ -108,271 +91,275 @@
 
         p {
             color: var(--muted);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
+        /* TABLE */
         .table-wrapper {
             overflow-x: auto;
-            margin-top: 1rem;
         }
 
-        .table {
+        table {
             width: 100%;
             border-collapse: collapse;
             background: var(--card);
             border-radius: var(--radius);
-            overflow: hidden;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
-        .table th,
-        .table td {
+        th,
+        td {
             padding: 0.75rem 1rem;
             border-bottom: 1px solid var(--border);
             text-align: left;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
+            vertical-align: top;
         }
 
-        .table th {
+        th {
             background: var(--secondary);
-            color: var(--fg);
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            font-size: 0.7rem;
             letter-spacing: 0.05em;
         }
 
-        .table td {
-            color: var(--fg);
+        tr:hover {
+            background: #f8fafc;
         }
 
-        .table tr:hover {
-            background: var(--hover-bg);
-        }
-
+        /* STATUS */
         .status-pill {
             padding: 0.25rem 0.6rem;
             border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.7rem;
+            font-weight: 700;
             display: inline-block;
-            text-align: center;
         }
 
-        .status-pill.valid {
+        .valid {
             background: #dcfce7;
             color: #166534;
         }
 
-        .status-pill.expiring {
+        .expiring {
             background: #fef3c7;
             color: #92400e;
         }
 
-        .status-pill.expired {
+        .expired {
             background: #fee2e2;
             color: #991b1b;
         }
 
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
+        /* FORM */
         select,
         input[type="date"] {
             padding: 0.4rem 0.6rem;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            font-size: 0.875rem;
-            min-width: 100px;
+            font-size: 0.8rem;
+            min-width: 110px;
         }
 
-        button.btn-ghost {
-            padding: 0.4rem 0.8rem;
-            background: #f1f5f9;
-            border: 1px solid var(--border);
+        td form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .btn {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.75rem;
             border-radius: var(--radius);
-            color: var(--fg);
+            border: 1px solid var(--border);
+            background: #f1f5f9;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
-        button.btn-ghost:hover {
+        .btn:hover {
             background: var(--primary);
-            color: #fff;
+            color: white;
             border-color: var(--primary);
         }
 
-        .upload-form {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-
         .upload-form input[type="file"] {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            max-width: 180px;
         }
 
-        .card-success {
-            background: #ecfeff;
-            border-color: #67e8f9;
-            color: #155e75;
-            padding: 1rem;
+        /* SUPPLIER BADGE */
+        .trusted-supplier {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 0.25rem 0.5rem;
             border-radius: var(--radius);
-            margin-bottom: 1rem;
-            font-weight: 600;
         }
 
         .trusted-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
             margin-left: 0.5rem;
-            padding: 0.15rem 0.5rem;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
+            padding: 0.15rem 0.45rem;
+            font-size: 0.6rem;
             border-radius: 999px;
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+            color: white;
+            font-weight: 700;
         }
 
-        .trusted-supplier {
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--radius);
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
+        .muted {
+            color: var(--muted);
+        }
+
+        /* Upload column */
+        .upload-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .upload-cell input[type="file"] {
+            font-size: 0.7rem;
+            max-width: 160px;
+        }
+
+        .upload-cell button {
+            align-self: flex-start;
+        }
+
+        /* Action (Save) */
+        .action-cell {
+            display: flex;
+            align-items: center;
         }
     </style>
-
 </head>
 
 <body>
 
-    <!-- Header -->
     <header>
-        <div class="container">
-            <div class="header-inner">
-                <div class="logo">
-                    <img src="/assets/vita-logo.png" alt="VITA Logo">
-                    <span>VITA</span>
-                </div>
-                <nav>
-                    <a href="/">Home</a>
-                    <a href="/about-us">About Us</a>
-                    <a href="/subscription">Subscription</a>
-                    <a href="/career">Career</a>
-                    <a href="/contact">Contact</a>
-                </nav>
-                <div>
-                    <% if (userName) { %>
-                        <span>Welcome <%= userName %></span>
+        <div class="container header-inner">
+            <div class="logo">
+                <img src="/assets/vita-logo.png">
+                <span>VITA</span>
+            </div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about-us">About</a>
+                <a href="/subscription">Subscription</a>
+                <a href="/career">Career</a>
+                <a href="/contact">Contact</a>
+            </nav>
+            <div>
+                <% if (userName) { %>
+                    Welcome <%= userName %>
                         <% } else { %>
-                            <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
+                            <a href="/register" class="btn">Sign Up</a>
                             <% } %>
-                </div>
             </div>
         </div>
     </header>
 
     <div class="container">
-        <% if (uploaded) { %>
-            <div class="card" style="background:#ecfeff; border-color:#67e8f9; color:#155e75;">
-                ✔ Document uploaded successfully
-            </div>
-            <% } %>
 
-                <h1>Compliance <span>Management</span></h1>
-                <p>Automated tracking of insurance, licensing, and safety compliance across suppliers.</p>
+        <h1>Compliance <span>Management</span></h1>
+        <p>Automated tracking of insurance, licensing, and safety compliance.</p>
 
-                <div class="table-wrapper">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Supplier</th>
-                                <th>Type</th>
-                                <th>Document</th>
-                                <th>Status</th>
-                                <th>Expiry</th>
-                                <% if (role==='supplier' ) { %>
-                                    <th>Action</th>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Supplier</th>
+                        <th>Type</th>
+                        <th>Document</th>
+                        <th>Status</th>
+                        <th>Expiry</th>
+                        <% if (role==='supplier' ) { %>
+                            <th>Action</th>
+                            <th>Upload</th>
+                            <% } %>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% records.forEach(r=> { %>
+                        <tr>
+
+                            <td>
+                                <strong class="<%= r.supplier_subscription === 'pro' ? 'trusted-supplier' : '' %>">
+                                    <%= r.supplier_name %>
+                                </strong>
+                                <% if (r.supplier_subscription==='pro' ) { %>
+                                    <span class="trusted-badge">Trusted</span>
                                     <% } %>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% records.forEach(r=> { %>
-                                <tr>
+                            </td>
+
+                            <td>
+                                <%= r.compliance_type %>
+                            </td>
+
+                            <td>
+                                <% if (r.document_path) { %>
+                                    <a href="/<%= r.document_path %>" target="_blank">
+                                        <%= r.document_name %>
+                                    </a>
+                                    <% } else { %>
+                                        <span class="muted">No document</span>
+                                        <% } %>
+                            </td>
+
+                            <% if (role==='supplier' ) { %>
+                                <!-- Status cell: input belongs to the update form via form="update-<%= r.id %>" -->
+                                <td>
+                                    <select name="status" form="update-<%= r.id %>">
+                                        <option value="Valid" <%=r.status==='Valid' ? 'selected' : '' %>>Valid</option>
+                                        <option value="Expiring" <%=r.status==='Expiring' ? 'selected' : '' %>>Expiring
+                                        </option>
+                                        <option value="Expired" <%=r.status==='Expired' ? 'selected' : '' %>>Expired
+                                        </option>
+                                    </select>
+                                </td>
+
+                                <!-- Expiry cell: date input also belongs to the update form -->
+                                <td>
+                                    <input type="date" name="expiry_date" value="<%= r.expiry_date %>"
+                                        form="update-<%= r.id %>">
+                                </td>
+
+                                <!-- ACTION: chỉ Save -->
+                                <td>
+                                    <form id="update-<%= r.id %>" action="/compliance/update/<%= r.id %>" method="POST"
+                                        class="action-cell">
+                                        <button class="btn" type="submit">Save</button>
+                                    </form>
+                                </td>
+
+                                <!-- UPLOAD: cột riêng -->
+                                <td>
+                                    <form action="/compliance/upload/<%= r.id %>" method="POST"
+                                        enctype="multipart/form-data" class="upload-cell">
+                                        <input type="file" name="document" required>
+                                        <button class="btn" type="submit">Upload</button>
+                                    </form>
+                                </td>
+                                <% } else { %>
                                     <td>
-                                        <strong
-                                            class="<%= r.supplier_subscription === 'pro' ? 'trusted-supplier' : '' %>">
-                                            <%= r.supplier_name %>
-                                        </strong>
-
-                                        <% if (r.supplier_subscription==='pro' ) { %>
-                                            <span class="trusted-badge">Trusted Supplier</span>
-                                            <% } %>
-                                    </td>
-
-                                    <td>
-                                        <%= r.compliance_type %>
+                                        <span class="status-pill <%= r.status.toLowerCase() %>">
+                                            <%= r.status %>
+                                        </span>
                                     </td>
                                     <td>
-                                        <% if (r.document_path) { %>
-                                            <a href="/<%= r.document_path %>" target="_blank">
-                                                <%= r.document_name %>
-                                            </a>
-                                            <% } else { %>
-                                                <span class="muted">No document</span>
-                                                <% } %>
+                                        <%= new Date(r.expiry_date).toLocaleDateString() %>
                                     </td>
+                                    <% } %>
 
-                                    <% if (role==='supplier' ) { %>
-                                        <!-- Editable fields form -->
-                                        <form action="/compliance/update/<%= r.id %>" method="POST">
-                                            <td>
-                                                <select name="status">
-                                                    <option value="Valid" <%=r.status==='Valid' ?'selected':'' %>>Valid
-                                                    </option>
-                                                    <option value="Expiring" <%=r.status==='Expiring' ?'selected':'' %>
-                                                        >Expiring</option>
-                                                    <option value="Expired" <%=r.status==='Expired' ?'selected':'' %>
-                                                        >Expired</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="date" name="expiry_date" value="<%= r.expiry_date %>">
-
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-ghost" type="submit">Save</button>
-                                                <!-- Upload button (separate form) -->
-                                                <form action="/compliance/upload/<%= r.id %>" method="POST"
-                                                    enctype="multipart/form-data" class="upload-form"
-                                                    style="margin-top:0.5rem;">
-                                                    <input type="file" name="document">
-                                                    <button class="btn btn-ghost" type="submit">Upload</button>
-                                                </form>
-                                            </td>
-                                        </form>
-                                        <% } else { %>
-                                            <td>
-                                                <span class="status-pill <%= r.status.toLowerCase() %>">
-                                                    <%= r.status %>
-                                                </span>
-                                                <%= new Date(r.expiry_date).toLocaleDateString() %>
-                                            </td>
-                                            <% } %>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                </div>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
     </div>
-
 
 </body>
 

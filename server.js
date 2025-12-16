@@ -239,7 +239,8 @@ app.get('/orders', (req, res) => {
 
       res.render('orders/orders', {
         orders: results,
-        userName: req.session.userName
+        userName: req.session.userName,
+        role: req.session.role
       });
     }
   );
@@ -358,7 +359,8 @@ app.get('/compliance', (req, res) => {
           role,
           userName,
           isProSupplier,
-          uploaded: req.query.uploaded === '1'
+          uploaded: req.query.uploaded === '1',
+          updated: req.query.updated === '1'
         });
       });
     }
@@ -431,7 +433,8 @@ app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
   const { id } = req.params;
 
   // Đường dẫn lưu file trong public
-  const path = `uploads/${req.file.filename}`;
+  const path = `uploads/compliance/${req.file.filename}`;
+  console.log("req.file", req.file)
 
   db.query(
     'UPDATE compliance_records SET document_name = ?, document_path = ? WHERE id = ?',
@@ -446,7 +449,7 @@ app.post('/compliance/upload/:id', upload.single('document'), (req, res) => {
 
 app.get('/projects', (req, res) => {
   const userId = req.session.userId;
-  
+
   if (!userId) return res.redirect('/login');
 
   db.query(
@@ -468,7 +471,7 @@ app.get('/projects', (req, res) => {
             projects,
             userName: name,
             role: role,
-            appliedProjectIds:  []
+            appliedProjectIds: []
           });
         }
       );
