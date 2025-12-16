@@ -326,6 +326,7 @@
         <div>
           <% if (userName) { %>
             <span>Welcome <%= userName %></span>
+            <button class="btn btn-ghost"><a href="/login">Sign out</a></button>
             <% } else { %>
               <button class="btn btn-ghost"><a href="/register">Sign Up</a></button>
               <% } %>
