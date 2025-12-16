@@ -12,6 +12,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use((req, res, next) => {
+  res.locals.role = req.session?.role || null;
+  res.locals.userName = req.session?.userName || null;
+  next();
+});
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 const session = require('express-session');
