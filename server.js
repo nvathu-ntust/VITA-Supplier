@@ -318,7 +318,6 @@ app.get('/compliance', (req, res) => {
   const userId = req.session.userId;
   if (!userId) return res.redirect('/login');
 
-  // Get current user info
   db.query(
     'SELECT id, role, name, subscription FROM users WHERE id = ?',
     [userId],
@@ -339,13 +338,19 @@ app.get('/compliance', (req, res) => {
           cr.document_path,
           u.subscription AS supplier_subscription
         FROM compliance_records cr
-        LEFT JOIN users u
-          ON LOWER(u.name) = LOWER(cr.supplier_name)
+        LEFT JOIN (
+          SELECT 
+            LOWER(name) AS lname,
+            MAX(subscription) AS subscription
+          FROM users
+          GROUP BY LOWER(name)
+        ) u
+          ON u.lname = LOWER(cr.supplier_name)
       `;
 
       const params = [];
 
-      // Supplier: only see own records
+      // Supplier: chỉ thấy record của chính mình
       if (role === 'supplier') {
         sql += ' WHERE LOWER(cr.supplier_name) = LOWER(?)';
         params.push(userName);
@@ -356,7 +361,6 @@ app.get('/compliance', (req, res) => {
       db.query(sql, params, (err2, records) => {
         if (err2) return res.status(500).send(err2);
 
-        // Is current supplier PRO?
         const isProSupplier =
           role === 'supplier' && subscription === 'pro';
 
