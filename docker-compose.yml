@@ -21,7 +21,7 @@ services:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
     ports:
-      - "20257:3000"
+      - "20256:3000"
     command: sh -c "npm install && npx nodemon server.js"
     environment:
       DB_HOST: mysql
