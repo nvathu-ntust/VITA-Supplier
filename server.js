@@ -55,18 +55,41 @@ function getNextId() {
 }
 
 // MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
+
+let db
+
+function connectWithRetry() {
+  db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   port: 3306,
-  password: 'root', // your password
-  database: 'VITA'
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME
 });
 
-db.connect(err => {
-  if (err) console.log('DB connection error:', err);
-  else console.log('Connected to MySQL');
-});
+  db.connect(err => {
+    if (err) {
+      console.error("DB not ready, retrying in 5s...");
+      setTimeout(connectWithRetry, 5000);
+    } else {
+      console.log("Connected to MySQL!");
+    }
+  });
+}
+
+connectWithRetry();
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST || 'localhost',
+//   user: process.env.DB_USER || 'root',
+//   port: 3306,
+//   password: process.env.DB_PASSWORD || 'root', 
+//   database: process.env.DB_NAME || 'VITA'
+// });
+
+// db.connect(err => {
+//   if (err) console.log('DB connection error:', err);
+//   else console.log('Connected to MySQL');
+// });
 
 
 // Routes
@@ -592,4 +615,6 @@ app.post('/login', (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Server running on port 3000');
+});

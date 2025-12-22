@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.1         
+    container_name: VITA_supply
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password123
+      MYSQL_DATABASE: VITA
+      MYSQL_USER: anhthu
+      MYSQL_PASSWORD: password123
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    command: --secure-file-priv=""
+  app:
+    image: node:20
+    container_name: VITA_supply_app
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "20257:3000"
+    command: sh -c "npm install && npx nodemon server.js"
+    environment:
+      DB_HOST: mysql
+      DB_USER: anhthu
+      DB_PASSWORD: password123
+      DB_NAME: VITA
+    depends_on:
+      - mysql

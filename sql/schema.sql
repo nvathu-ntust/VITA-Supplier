@@ -1,7 +1,3 @@
-CREATE DATABASE VITA;
-
-USE VITA;
-
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255),
@@ -74,7 +70,7 @@ CREATE TABLE projects (
   status ENUM('open', 'approved', 'closed') DEFAULT 'open',
   approved_by INT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 INSERT INTO projects (name, description, budget, deadline, status)
 VALUES
@@ -114,6 +110,8 @@ VALUES
   'closed'
 );
 
+ALTER TABLE users
+ADD COLUMN role ENUM('contractor', 'supplier');
 
 
 -- Insert mock data
@@ -135,4 +133,79 @@ VALUES
 ('ABC Electrical Co.', 'Safety', 'OSHA Safety Certificate', 'Expired', '2024-12-01'),
 ('Delta Steel Works', 'Insurance', 'Worker Compensation', 'Valid', '2026-01-18'),
 ('Prime Plumbing Services', 'Safety', 'Site Safety Training', 'Expiring', '2025-08-20');
+
+INSERT INTO orders (
+  order_number,
+  supplier_name,
+  product_name,
+  quantity,
+  status,
+  order_date,
+  expected_delivery
+)
+VALUES
+(
+  'ORD-2025-001',
+  'ABC Materials',
+  'Cement Bag',
+  100,
+  'Pending',
+  '2025-01-05',
+  '2025-01-12'
+),
+(
+  'ORD-2025-002',
+  'Steel Co',
+  'Steel Rod',
+  50,
+  'Shipped',
+  '2025-01-02',
+  '2025-01-10'
+),
+(
+  'ORD-2025-003',
+  'HeavyMachinery Inc',
+  'Excavator',
+  1,
+  'Delivered',
+  '2024-12-20',
+  '2024-12-28'
+),
+(
+  'ORD-2025-004',
+  'Colors Ltd',
+  'Paint',
+  200,
+  'Cancelled',
+  '2025-01-01',
+  '2025-01-08'
+),
+(
+  'ORD-2025-005',
+  'MixerPro',
+  'Concrete Mixer',
+  3,
+  'Pending',
+  '2025-01-07',
+  '2025-01-18'
+),
+(
+  'ORD-2025-006',
+  'ABC Materials',
+  'Sand',
+  500,
+  'Delivered',
+  '2024-12-15',
+  '2024-12-22'
+),
+(
+  'ORD-2025-007',
+  'GravelCorp',
+  'Gravel',
+  120,
+  'Shipped',
+  '2025-01-04',
+  '2025-01-11'
+);
+
 
